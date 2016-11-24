@@ -1,0 +1,7 @@
+package: github.com/jjdekker/ChonoZinc
+license: MIT License
+owners:
+- name: Jip J. Dekker
+  email: jip@dekker.li
+  homepage: https://jip.dekker.li/
+import:

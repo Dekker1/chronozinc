@@ -1,4 +1,4 @@
-package: github.com/jjdekker/ChonoZinc
+package: github.com/jjdekker/chronozinc
 license: MIT License
 owners:
 - name: Jip J. Dekker
@@ -6,3 +6,4 @@ owners:
   homepage: https://jip.dekker.li/
 import:
 - package: github.com/spf13/cobra
+- package: github.com/spf13/viper

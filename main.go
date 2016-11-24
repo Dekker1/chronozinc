@@ -26,6 +26,8 @@ func initConfig() {
 		viper.SetConfigFile(cfgFile)
 	}
 
+	setDefaults()
+
 	viper.SetConfigName("config")                   // name of config file (without extension)
 	viper.AddConfigPath("$HOME/.config/chronozinc") // add home directory as first search path
 	viper.AddConfigPath(".")                        // add current directory as an alternative

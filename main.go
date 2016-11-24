@@ -27,7 +27,8 @@ func initConfig() {
 	}
 
 	viper.SetConfigName("config")                   // name of config file (without extension)
-	viper.AddConfigPath("$HOME/.config/chronozinc") // adding home directory as first search path
+	viper.AddConfigPath("$HOME/.config/chronozinc") // add home directory as first search path
+	viper.AddConfigPath(".")                        // add current directory as an alternative
 	viper.SetEnvPrefix("czn")                       // set environment prefix
 	viper.AutomaticEnv()                            // read in environment variables that match
 

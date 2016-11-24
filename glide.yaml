@@ -5,3 +5,4 @@ owners:
   email: jip@dekker.li
   homepage: https://jip.dekker.li/
 import:
+- package: github.com/spf13/cobra

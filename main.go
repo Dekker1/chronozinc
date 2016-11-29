@@ -17,7 +17,13 @@ var rootCmd = &cobra.Command{
 	test MiniZinc models using different solvers. It run your your model on all or
 	a sub-set of declared solvers and report on the statistics gathered. The data
 	gathered is saved in every stage.`,
-	Run: func(cmd *cobra.Command, args []string) {},
+	Run: func(cmd *cobra.Command, args []string) {
+		file, err := os.Open(path)
+		if err != nil {
+			return nil, err
+		}
+		viper.MergeConfig(file)
+	},
 }
 
 // initConfig reads in config file and ENV variables if set.
@@ -28,9 +34,9 @@ func initConfig() {
 
 	setDefaults()
 
-	viper.SetConfigName("config")                   // name of config file (without extension)
+	viper.SetConfigName("config.czn")               // name of config file (without extension)
 	viper.AddConfigPath("$HOME/.config/chronozinc") // add home directory as first search path
-	viper.AddConfigPath(".")                        // add current directory as an alternative
+	viper.AddConfigPath("/etc/chronozinc")          // adds global machine configuration
 	viper.SetEnvPrefix("czn")                       // set environment prefix
 	viper.AutomaticEnv()                            // read in environment variables that match
 

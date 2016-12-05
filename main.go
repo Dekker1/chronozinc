@@ -3,7 +3,11 @@ package main
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 
+	"github.com/jjdekker/chronozinc/parsing"
+	"github.com/jjdekker/chronozinc/runtime"
+	"github.com/jjdekker/chronozinc/settings"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -18,11 +22,26 @@ var rootCmd = &cobra.Command{
 	a sub-set of declared solvers and report on the statistics gathered. The data
 	gathered is saved in every stage.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		file, err := os.Open(path)
-		if err != nil {
-			return nil, err
+		for _, file := range args {
+			switch filepath.Ext(file) {
+			case ".mzn":
+				viper.Set("models", append(viper.GetStringSlice("models"), file))
+			case ".dzn":
+				viper.Set("data", append(viper.GetStringSlice("data"), file))
+			default:
+				viper.SetConfigFile(args[0])
+				fmt.Println("Using config file:", args[0])
+				err := viper.MergeInConfig()
+				if err != nil {
+					panic(err)
+				}
+			}
 		}
-		viper.MergeConfig(file)
+
+		solvers := settings.SolversFromViper()
+		instances := settings.InstancesFromViper()
+		runtime.RunAll(solvers, instances)
+		parsing.ParseAll(solvers, instances)
 	},
 }
 
@@ -32,9 +51,9 @@ func initConfig() {
 		viper.SetConfigFile(cfgFile)
 	}
 
-	setDefaults()
+	settings.SetViperDefaults()
 
-	viper.SetConfigName("config.czn")               // name of config file (without extension)
+	viper.SetConfigName("settings")                 // name of config file (without extension)
 	viper.AddConfigPath("$HOME/.config/chronozinc") // add home directory as first search path
 	viper.AddConfigPath("/etc/chronozinc")          // adds global machine configuration
 	viper.SetEnvPrefix("czn")                       // set environment prefix
@@ -43,8 +62,6 @@ func initConfig() {
 	// If a config file is found, read it in.
 	if err := viper.ReadInConfig(); err == nil {
 		fmt.Println("Using config file:", viper.ConfigFileUsed())
-	} else {
-		fmt.Println("No config file found; using ENV and defaults")
 	}
 }
 

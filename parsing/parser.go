@@ -2,7 +2,6 @@ package parsing
 
 import (
 	"encoding/csv"
-	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
@@ -11,6 +10,8 @@ import (
 	"github.com/spf13/viper"
 )
 
+// ParseAll parses all viper given parameters for all instances and saves them
+// to a CSV file
 func ParseAll(solvers []settings.Solver, instances []settings.Instance) {
 	params := viper.GetStringSlice("parameters")
 	if len(params) > 0 {
@@ -52,22 +53,24 @@ func persistantHeaders() []string {
 	return headers
 }
 
+// ParseParameter returns the parsed result of an Extraction for a given
+// instance if found.
 func ParseParameter(solver *settings.Solver, instance *settings.Instance,
 	parameter string) string {
-	fmt.Println(solver.Matchers)
-	var res string
 	if f, err := ioutil.ReadFile(instance.OutPath(solver.Name)); err != nil {
 		log.Printf("Unable to open file %s", instance.OutPath(solver.Name))
 	} else {
-		switch {
-		case (solver.Extractors[parameter] != nil):
-			res = Extract(f, solver.Extractors[parameter])
-		case (solver.LastExtractors[parameter] != nil):
-			res = ExtractLast(f, solver.LastExtractors[parameter])
-		case (solver.Matchers[parameter] != nil):
-			fmt.Println("do you see me?")
-			res = Match(f, solver.Matchers[parameter])
+		clusters := []*settings.ExtractionCluster{solver.Extractors, settings.GlobalExtractors()}
+		for _, c := range clusters {
+			switch {
+			case (c.Extractors[parameter] != nil):
+				return Extract(f, c.Extractors[parameter])
+			case (c.LastExtractors[parameter] != nil):
+				return ExtractLast(f, c.LastExtractors[parameter])
+			case (c.Matchers[parameter] != nil):
+				return Match(f, c.Matchers[parameter])
+			}
 		}
 	}
-	return res
+	return ""
 }

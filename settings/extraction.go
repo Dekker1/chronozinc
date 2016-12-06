@@ -1,7 +1,6 @@
 package settings
 
 import (
-	"fmt"
 	"log"
 	"regexp"
 
@@ -54,7 +53,6 @@ func ExtractorsFromViper(viperSpace string) *ExtractionCluster {
 				matcher[j] = reg
 			}
 		}
-		fmt.Println(matcher)
 		cluster.Matchers[i] = matcher
 	}
 

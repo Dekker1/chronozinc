@@ -27,6 +27,7 @@ declared in this file.
 
 ```toml
 parameters = ["time", "time_ms", "solvetime", "solvetime_ms", "status"]
+processes = 2
 
 [solvers.flatzinc]
 	binary = "flatzinc"

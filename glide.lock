@@ -1,6 +1,8 @@
-hash: 6d430f6a1ef26849e744fbcdc55580b635144827b8c18f8320451fb392c95658
-updated: 2016-12-06T17:12:06.994883543+01:00
+hash: d7671522fd3c009ebcddf17dec9509e7058300bf0cb27b930e472c98b66a469f
+updated: 2016-12-06T17:21:53.134747529+01:00
 imports:
+- name: github.com/cheggaaa/pb
+  version: d7e6ca3010b6f084d8056847f55d7f572f180678
 - name: github.com/fsnotify/fsnotify
   version: fd9ec7deca8bf46ecd2a795baaacf2b3a9be1197
 - name: github.com/hashicorp/hcl
@@ -18,6 +20,8 @@ imports:
   version: 76626ae9c91c4f2a10f34cad8ce83ea42c93bb75
 - name: github.com/magiconair/properties
   version: 9c47895dc1ce54302908ab8a43385d1f5df2c11c
+- name: github.com/mattn/go-runewidth
+  version: 737072b4e32b7a5018b4a7125da8d12de90e8045
 - name: github.com/mitchellh/mapstructure
   version: 5a0325d7fafaac12dda6e7fb8bd222ec1b69875e
 - name: github.com/pelletier/go-buffruneio

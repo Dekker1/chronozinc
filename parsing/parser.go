@@ -2,10 +2,12 @@ package parsing
 
 import (
 	"encoding/csv"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
 
+	"github.com/cheggaaa/pb"
 	"github.com/jjdekker/chronozinc/settings"
 	"github.com/spf13/viper"
 )
@@ -25,6 +27,8 @@ func ParseAll(solvers []settings.Solver, instances []settings.Instance) {
 
 		headers := append(persistantHeaders(), params...)
 		w.Write(headers)
+		fmt.Println("Parsing results:")
+		bar := pb.StartNew(len(solvers) * len(instances))
 		for i := range solvers {
 			for j := range instances {
 				record := make([]string, 0, len(headers))
@@ -40,8 +44,10 @@ func ParseAll(solvers []settings.Solver, instances []settings.Instance) {
 				}
 
 				w.Write(record)
+				bar.Increment()
 			}
 		}
+		bar.FinishPrint("Finished!")
 	}
 }
 

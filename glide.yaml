@@ -7,3 +7,5 @@ owners:
 import:
 - package: github.com/spf13/cobra
 - package: github.com/spf13/viper
+- package: github.com/cheggaaa/pb
+  version: ^1.0.7

@@ -1,6 +1,7 @@
 package runtime
 
 import (
+	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
@@ -9,6 +10,7 @@ import (
 	"strings"
 	"sync"
 
+	"github.com/cheggaaa/pb"
 	"github.com/jjdekker/chronozinc/settings"
 	"github.com/spf13/viper"
 )
@@ -18,14 +20,20 @@ func RunAll(solvers []settings.Solver, instances []settings.Instance) {
 	work := make(chan func())
 	wait := govern(work)
 
+	fmt.Println("Running solving instances:")
+	bar := pb.StartNew(len(solvers) * len(instances))
 	for i := range solvers {
 		for j := range instances {
-			work <- func() { RunInstance(&solvers[i], &instances[j]) }
+			work <- func() {
+				RunInstance(&solvers[i], &instances[j])
+				bar.Increment()
+			}
 		}
 	}
 	close(work)
 
 	wait.Wait()
+	bar.FinishPrint("Finished!")
 }
 
 func govern(work <-chan func()) *sync.WaitGroup {

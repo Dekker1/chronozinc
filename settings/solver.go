@@ -4,10 +4,11 @@ import "github.com/spf13/viper"
 
 // Solver contains all information regarding a FlatZinc solver and its output
 type Solver struct {
-	Name    string // Solver name
-	Binary  string // Binary location
-	Globals string // Globals directory
-	Flags   string // FZN solver flags
+	Name          string // Solver name
+	Binary        string // Binary location
+	Globals       string // Globals directory
+	Flags         string // FZN solver flags
+	OverrideFlags string // Override to global mzn-fzn flags
 
 	Extractors *ExtractionCluster
 }
@@ -20,9 +21,10 @@ func SolversFromViper() []Solver {
 		options := viper.GetStringMapString("solvers." + key)
 
 		solver := Solver{
-			Name:    key,
-			Flags:   options["flags"],
-			Globals: options["globals"],
+			Name:          key,
+			Flags:         options["flags"],
+			Globals:       options["globals"],
+			OverrideFlags: options["override_flags"],
 		}
 		if bin, exists := options["binary"]; exists {
 			solver.Binary = bin

@@ -58,7 +58,11 @@ func RunInstance(solver *settings.Solver, instance *settings.Instance) {
 	if instance.Data != "" {
 		args = append(args, "--data", instance.Data)
 	}
-	args = append(args, strings.Split(viper.GetString("flags"), " ")...)
+	if solver.OverrideFlags != "" {
+		args = append(args, strings.Split(solver.OverrideFlags, " ")...)
+	} else {
+		args = append(args, strings.Split(viper.GetString("flags"), " ")...)
+	}
 	proc := exec.Command(viper.GetString("mznfzn"), args...)
 
 	if out, err := proc.CombinedOutput(); err != nil {
